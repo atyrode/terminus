@@ -1,0 +1,42 @@
+<div class="relative">
+    <div class="w-full h-full absolute inset-0 bg-gray-900 rounded-xl translate-y-2 translate-x-2"></div>
+    <div class="bg-[#D6E9F2] rounded-xl relative z-20 pl-8 sm:pl-10 pr-8 sm:pr-16 py-8 border-[3px] border-gray-900">
+        <form class="flex md:flex-row flex-col w-full h-full justify-center items-stretch space-y-5 md:space-y-0 md:space-x-5"
+              id="mainForm"
+              onsubmit="handleSubmit(event{% if is_index %}, true{% endif %})">
+            <div class="relative w-full h-full">
+                <div class="w-full h-full rounded bg-gray-900 translate-y-1 translate-x-1 absolute inset-0 z-10"></div>
+                <input type="text"
+                       name="input_text"
+                       id="input_text"
+                       placeholder="https://github.com/..."
+                       value="{{ repo_url if repo_url else '' }}"
+                       required
+                       class="border-[3px] w-full relative z-20 border-gray-900 placeholder-gray-600 text-lg font-medium focus:outline-none py-3.5 px-6 rounded">
+            </div>
+            <div class="relative w-auto flex-shrink-0 h-full group">
+                <div class="w-full h-full rounded bg-gray-800 translate-y-1 translate-x-1 absolute inset-0 z-10"></div>
+                <button type="submit"
+                        class="bg-[#88C0D5] py-3.5 rounded px-6 group-hover:-translate-y-px group-hover:-translate-x-px ease-out duration-300 z-20 relative w-full border-[3px] border-gray-900 font-medium tracking-wide text-lg flex-shrink-0 text-gray-900">
+                    🚀
+                </button>
+            </div>
+            <input type="hidden" name="pattern_type" value="exclude">
+            <input type="hidden" name="pattern" value="">
+        </form>
+        {% if show_examples %}
+            <!-- Example repositories section -->
+            <div class="mt-6">
+                <p class="opacity-70 mb-1">Try these example repositories:</p>
+                <div class="flex flex-wrap gap-2">
+                    {% for example in examples %}
+                        <button onclick="submitExample('{{ example.url }}')"
+                                class="px-4 py-1 bg-[#ADD2E4] hover:bg-[#88C0D5] text-gray-900 rounded transition-colors duration-200 border-[3px] border-gray-900 relative hover:-translate-y-px hover:-translate-x-px">
+                            {{ example.name }}
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

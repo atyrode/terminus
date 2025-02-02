@@ -1,0 +1,66 @@
+name: Template Script Tests
+
+on:
+  push:
+    paths:
+      - 'template.py'
+      - '.github/workflows/template.yml'
+  pull_request:
+    paths:
+      - 'template.py'
+      - '.github/workflows/template.yml'
+
+jobs:
+  test-template:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install rich
+
+    - name: Create & activate virtual environment
+      run: |
+        python3 -m venv venv
+        source venv/bin/activate
+
+    - name: Test non-interactive mode
+      run: |
+        python template.py --yes
+
+    - name: Verify file processing
+      run: |
+        if [ -d "src/placeholder" ]; then
+          echo "placeholder directory was not renamed"
+          exit 1
+        fi
+      shell: bash
+
+    - name: Test environment setup
+      run: |
+        # Verify virtual environment
+        test -d "venv" || (echo "Virtual environment not created" && exit 1)
+        # Verify pre-commit hooks if .pre-commit-config.yaml exists
+        if [ -f ".pre-commit-config.yaml" ]; then
+          test -d ".git/hooks" || (echo "Pre-commit hooks not installed" && exit 1)
+        fi
+      shell: bash
+
+    - name: Clean up
+      run: |
+        rm -rf venv
+        git checkout .
+      shell: bash
