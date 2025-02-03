@@ -1,4 +1,4 @@
-click>=8.0.0
+click>=8.1.8
 fastapi-analytics
 fastapi[standard]
 gitingest
@@ -7,3 +7,10 @@ rich>=13.7.0
 slowapi
 starlette
 uvicorn
+httpx>=0.24.0
+
+# Terminal management dependencies
+websockets>=10.0
+python-multipart>=0.0.5
+
+python-dotenv

@@ -1,20 +1,21 @@
 [project]
-name = "{{ package_name }}"
-version = "{{ package_version }}"
-description="{{ package_description }}"
+name = "terminus-cli"
+version = "0.1.0"
+description="Access terminals from your computer, in your browser."
 readme = {file = "README.md", content-type = "text/markdown" }
 requires-python = ">= 3.10"
 dependencies = [
     "click>=8.0.0",
-    "fastapi-analytics",
     "fastapi[standard]",
     "python-dotenv",
-    "slowapi",
-    "starlette",
-    "uvicorn",
+    "rich>=13.7.0",
+    "httpx>=0.24.0",
+    "websockets>=10.0",
+    "python-multipart>=0.0.5",
+    "tomli>=2.0.1; python_version < '3.11'"  # For Python versions that don't have tomllib
 ]
 license = {file = "LICENSE"}
-authors = [{name = "{{ author }}", email = "{{ author_email }}"}]
+authors = [{name = "Alex TYRODE", email = "alex.tyrode@outlook.fr"}]
 classifiers=[
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -26,15 +27,15 @@ classifiers=[
 ]
 
 [project.scripts]
-"{{ package_name }}" = "{{ package_name }}.cli:cli"
+terminus = "cli.app:cli"
 
 [project.urls]
-homepage = "{{ project_url }}"
-github = "https://github.com/{{ github_username }}/{{ github_repository }}"
+homepage = "https://terminus.run"
+github = "https://github.com/atyrode/terminus"
 
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.setuptools]
 packages = {find = {where = ["src"]}}
@@ -77,3 +78,6 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 python_classes = "Test*"
 python_functions = "test_*"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/"]

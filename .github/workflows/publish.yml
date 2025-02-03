@@ -8,6 +8,11 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    
+    # Add permissions needed for OIDC
+    permissions:
+      id-token: write  # Required for OIDC
+      contents: read   # Required for actions/checkout
 
     steps:
       # Step 1: Check out the code
@@ -31,11 +36,7 @@ jobs:
         run: |
           python -m build
 
-      # Step 5: Publish to PyPI
+      # Step 5: Publish to PyPI using trusted publisher
       - name: Publish to PyPI
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: |
-          python -m twine check dist/*
-          python -m twine upload --skip-existing dist/*
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # No credentials needed - will use OIDC
